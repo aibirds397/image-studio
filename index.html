@@ -3,143 +3,134 @@
 <head>
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <title>Studio Ultra Pro - Master Edition</title>
+    <title>Studio Ultra Pro - Advanced Image Toolkit</title>
     
-    <!-- FIX: Loading external libraries correctly -->
+    <!-- Libraries for ZIP, Confetti, and UI -->
     <script src="https://cloudflare.com"></script>
     <script src="https://jsdelivr.net"></script>
     <link href="https://googleapis.com" rel="stylesheet">
 
     <style>
-        :root { --primary: #6366f1; --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --border: #334155; --accent: #38bdf8; }
-        [data-theme="light"] { --primary: #4f46e5; --bg: #f1f5f9; --card: #ffffff; --text: #1e293b; --border: #e2e8f0; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; transition: 0.4s; }
-        .container { background: var(--card); padding: 30px; border-radius: 24px; border: 1px solid var(--border); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); width: 100%; max-width: 850px; }
-        .header h2 { background: linear-gradient(to right, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; margin: 0; }
-        .upload-area { border: 2px dashed var(--border); padding: 40px; border-radius: 20px; text-align: center; margin: 25px 0; cursor: pointer; background: rgba(99, 102, 241, 0.03); }
-        .section { background: rgba(0,0,0,0.03); border: 1px solid var(--border); padding: 20px; border-radius: 16px; margin-bottom: 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; }
-        input, select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text); }
-        #previewCanvas { max-width: 100%; border-radius: 12px; display: none; margin: 20px auto; border: 1px solid var(--border); }
-        .main-btn { background: linear-gradient(135deg, var(--primary) 0%, #4f46e5 100%); color: white; border: none; padding: 18px; border-radius: 14px; font-weight: 800; cursor: pointer; width: 100%; transition: 0.3s; }
-        .pos-btn { padding: 8px; border: 1px solid var(--border); background: var(--card); border-radius: 8px; cursor: pointer; color: var(--text); }
-        .pos-btn.active { background: var(--primary); color: white; }
-        #successModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 5000; justify-content: center; align-items: center; text-align: center; }
-        .modal-content { background: var(--card); padding: 40px; border-radius: 30px; border: 1px solid var(--primary); max-width: 400px; }
+        :root { --primary: #6366f1; --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --border: #334155; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .container { background: var(--card); padding: 30px; border-radius: 24px; border: 1px solid var(--border); width: 100%; max-width: 850px; }
+        .upload-area { border: 2px dashed var(--primary); padding: 40px; border-radius: 20px; text-align: center; margin: 20px 0; cursor: pointer; }
+        .section { background: rgba(0,0,0,0.2); padding: 20px; border-radius: 16px; margin-bottom: 20px; border: 1px solid var(--border); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+        input, select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: #0f172a; color: white; margin-top: 5px; }
+        .main-btn { background: var(--primary); color: white; border: none; padding: 18px; border-radius: 14px; font-weight: 800; cursor: pointer; width: 100%; margin-top: 10px; }
+        canvas { max-width: 100%; border-radius: 12px; margin-top: 20px; display: none; }
+        label { font-size: 12px; font-weight: 600; opacity: 0.8; }
     </style>
 </head>
-<body data-theme="dark">
+<body>
 
-    <div class="container">
-        <div class="header" style="display: flex; justify-content: space-between; align-items: center;">
-            <h2>Studio Ultra Pro</h2>
-            <button class="pos-btn" onclick="toggleTheme()">🌓 Theme</button>
-        </div>
-
-        <div class="upload-area" onclick="document.getElementById('files').click()">
-            <strong id="status">Click to Upload Images</strong>
-            <input type="file" id="files" accept="image/*" multiple style="display:none">
-        </div>
-
-        <canvas id="previewCanvas"></canvas>
-
-        <div class="section">
-            <div class="grid">
-                <div><label>Watermark Text</label><input type="text" id="wmText" placeholder="@Brand" oninput="updatePreview()"></div>
-                <div><label>Font</label>
-                    <select id="wmFont" onchange="updatePreview()">
-                        <option value="Inter">Modern</option>
-                        <option value="'Lobster'">Playful</option>
-                        <option value="'Montserrat'">Bold</option>
-                    </select>
-                </div>
-                <div><label>Opacity</label><input type="range" id="wmOpacity" min="0.1" max="1.0" step="0.1" value="0.7" oninput="updatePreview()"></div>
-            </div>
-        </div>
-
-        <button class="main-btn" id="goBtn" onclick="processBatch()">⚡ Process & Download ZIP</button>
+<div class="container">
+    <h2 style="text-align:center; color:var(--primary);">Studio Ultra Pro - Master Tool</h2>
+    
+    <div class="upload-area" onclick="document.getElementById('files').click()">
+        <strong id="status">Drop Images or Click to Upload</strong>
+        <input type="file" id="files" accept="image/*" multiple style="display:none">
     </div>
 
-    <!-- Success Modal -->
-    <div id="successModal">
-        <div class="modal-content">
-            <h1 style="color:var(--accent)">Success! 🎉</h1>
-            <p>Your images are ready.</p>
-            <button class="main-btn" onclick="document.getElementById('successModal').style.display='none'">Back</button>
+    <canvas id="previewCanvas"></canvas>
+
+    <!-- NEW: Advanced Tools like Pi7 -->
+    <div class="section">
+        <div style="color:var(--primary); font-weight:800; margin-bottom:15px; text-transform:uppercase; font-size:11px;">Image Controls</div>
+        <div class="grid">
+            <div><label>Target Size (KB)</label><input type="number" id="targetKB" placeholder="e.g. 50"></div>
+            <div><label>Resize Width (px)</label><input type="number" id="targetWidth" placeholder="Original"></div>
+            <div><label>Resize Height (px)</label><input type="number" id="targetHeight" placeholder="Original"></div>
+            <div><label>Format</label><select id="fmt"><option value="image/jpeg">JPEG</option><option value="image/png">PNG</option><option value="image/webp">WebP</option></select></div>
         </div>
     </div>
 
-    <!-- THE BRAIN: JavaScript is needed to make it work -->
-    <script>
-        let filesArr = [], activePos = 'bottom-right';
+    <!-- Watermark Section -->
+    <div class="section">
+        <div style="color:var(--primary); font-weight:800; margin-bottom:15px; text-transform:uppercase; font-size:11px;">Watermark branding</div>
+        <div class="grid">
+            <div><label>Text</label><input type="text" id="wmText" placeholder="@YourBrand" oninput="updatePreview()"></div>
+            <div><label>Text Opacity</label><input type="range" id="wmOpacity" min="0.1" max="1.0" step="0.1" value="0.7" oninput="updatePreview()"></div>
+            <div><label>Position</label><select id="wmPos" onchange="updatePreview()"><option value="bottom-right">Bottom Right</option><option value="center">Center</option><option value="top-left">Top Left</option></select></div>
+        </div>
+    </div>
 
-        const toggleTheme = () => {
-            const b = document.body;
-            b.setAttribute('data-theme', b.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
-        };
+    <button class="main-btn" id="goBtn" onclick="processBatch()">⚡ PROCESS & DOWNLOAD ALL (ZIP)</button>
+</div>
 
-        document.getElementById('files').onchange = (e) => {
-            filesArr = Array.from(e.target.files);
-            if(filesArr.length) {
-                document.getElementById('status').innerText = filesArr.length + " Files Selected";
-                document.getElementById('previewCanvas').style.display = 'block';
-                updatePreview();
-            }
-        };
+<script>
+    let filesArr = [];
+    const filesInput = document.getElementById('files');
+    const previewCanvas = document.getElementById('previewCanvas');
 
-        function updatePreview() {
-            if (!filesArr.length) return;
-            const r = new FileReader();
-            r.onload = (e) => {
-                const img = new Image();
-                img.onload = () => draw(document.getElementById('previewCanvas'), img);
-                img.src = e.target.result;
-            };
-            r.readAsDataURL(filesArr[0]);
+    filesInput.onchange = (e) => {
+        filesArr = Array.from(e.target.files);
+        if(filesArr.length) {
+            document.getElementById('status').innerText = filesArr.length + " Files Ready";
+            previewCanvas.style.display = 'block';
+            updatePreview();
         }
+    };
 
-        function draw(cvs, img) {
-            const ctx = cvs.getContext('2d');
-            cvs.width = img.width; cvs.height = img.height;
-            ctx.drawImage(img, 0, 0);
+    function updatePreview() {
+        if (!filesArr.length) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => draw(previewCanvas, img);
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(filesArr[0]);
+    }
 
-            const txt = document.getElementById('wmText').value;
-            if(txt) {
-                ctx.globalAlpha = document.getElementById('wmOpacity').value;
-                ctx.fillStyle = "white";
-                ctx.font = `bold ${cvs.width * 0.05}px ${document.getElementById('wmFont').value}`;
-                ctx.fillText(txt, 50, cvs.height - 50);
-            }
+    function draw(cvs, img) {
+        const ctx = cvs.getContext('2d');
+        const tw = document.getElementById('targetWidth').value || img.width;
+        const th = document.getElementById('targetHeight').value || img.height;
+        
+        cvs.width = tw; cvs.height = th;
+        ctx.drawImage(img, 0, 0, tw, th);
+
+        const txt = document.getElementById('wmText').value;
+        if(txt) {
+            ctx.globalAlpha = document.getElementById('wmOpacity').value;
+            ctx.fillStyle = "white";
+            ctx.font = `bold ${cvs.width * 0.05}px Arial`;
+            const pos = document.getElementById('wmPos').value;
+            if(pos === 'bottom-right') ctx.fillText(txt, cvs.width - (ctx.measureText(txt).width + 20), cvs.height - 30);
+            else if(pos === 'center') ctx.fillText(txt, (cvs.width - ctx.measureText(txt).width)/2, cvs.height/2);
+            else ctx.fillText(txt, 20, 40);
         }
+        ctx.globalAlpha = 1.0;
+    }
 
-        async function processBatch() {
-            if(!filesArr.length) return alert("Select files first!");
-            const btn = document.getElementById('goBtn');
-            btn.disabled = true; btn.innerText = "Zipping...";
-            const zip = new JSZip();
-
-            for (let f of filesArr) {
-                const data = await new Promise(res => {
-                    const r = new FileReader();
-                    r.onload = (e) => {
-                        const img = new Image();
-                        img.onload = () => {
-                            const c = document.createElement('canvas');
-                            draw(c, img);
-                            res(c.toDataURL('image/jpeg', 0.8));
-                        };
-                        img.src = e.target.result;
+    async function processBatch() {
+        const zip = new JSZip();
+        const targetKB = document.getElementById('targetKB').value;
+        
+        for (let f of filesArr) {
+            const data = await new Promise(res => {
+                const r = new FileReader();
+                r.onload = (e) => {
+                    const i = new Image();
+                    i.onload = () => {
+                        const c = document.createElement('canvas');
+                        draw(c, i);
+                        let quality = 0.8;
+                        if(targetKB) quality = 0.5; // Simple compression logic
+                        res(c.toDataURL(document.getElementById('fmt').value, quality));
                     };
-                    r.readAsDataURL(f);
-                });
-                zip.file("studio_" + f.name, data.split(','), {base64: true});
-            }
-            const blob = await zip.generateAsync({type:"blob"});
-            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = "images.zip"; a.click();
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-            document.getElementById('successModal').style.display = 'flex';
-            btn.disabled = false; btn.innerText = "⚡ Process & Download ZIP";
+                    i.src = e.target.result;
+                };
+                r.readAsDataURL(f);
+            });
+            zip.file("studio_" + f.name, data.split(',')[1], {base64: true});
         }
-    </script>
+        const blob = await zip.generateAsync({type:"blob"});
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = "processed_images.zip"; a.click();
+        confetti({ particleCount: 150, spread: 70 });
+    }
+</script>
 </body>
 </html>

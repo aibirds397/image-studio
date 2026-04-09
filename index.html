@@ -1,10 +1,3 @@
-/*
-Theme Name: Precious Theme
-Author: Muhammad Amin
-Version: 2.0
-Text Domain: precious-theme
-*/
-body { font-family: Arial, sans-serif; }
 <!DOCTYPE html>
 <html lang='en'>
 <head>
@@ -12,70 +5,27 @@ body { font-family: Arial, sans-serif; }
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <title>Studio Ultra Pro - Master Edition</title>
     
-    <!-- Premium Libraries -->
-    <link href="https://googleapis.com" rel="stylesheet">
+    <!-- FIX: Loading external libraries correctly -->
     <script src="https://cloudflare.com"></script>
     <script src="https://jsdelivr.net"></script>
+    <link href="https://googleapis.com" rel="stylesheet">
 
     <style>
-        :root { 
-            --primary: #6366f1; --bg: #0f172a; --card: #1e293b; 
-            --text: #f8fafc; --border: #334155; --accent: #38bdf8; 
-        }
-        [data-theme="light"] { 
-            --primary: #4f46e5; --bg: #f1f5f9; --card: #ffffff; 
-            --text: #1e293b; --border: #e2e8f0; 
-        }
-
-        body { 
-            font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); 
-            margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; transition: 0.4s;
-            background-image: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 50%);
-        }
-
-        .container { 
-            background: var(--card); padding: 30px; border-radius: 24px; border: 1px solid var(--border);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); width: 100%; max-width: 850px;
-        }
-
-        .header h2 {
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            font-weight: 800; letter-spacing: -1px; margin: 0;
-        }
-
-        .upload-area { 
-            border: 2px dashed var(--border); padding: 40px; border-radius: 20px; text-align: center; 
-            margin: 25px 0; cursor: pointer; background: rgba(99, 102, 241, 0.03); transition: 0.3s;
-        }
-
+        :root { --primary: #6366f1; --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --border: #334155; --accent: #38bdf8; }
+        [data-theme="light"] { --primary: #4f46e5; --bg: #f1f5f9; --card: #ffffff; --text: #1e293b; --border: #e2e8f0; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; transition: 0.4s; }
+        .container { background: var(--card); padding: 30px; border-radius: 24px; border: 1px solid var(--border); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); width: 100%; max-width: 850px; }
+        .header h2 { background: linear-gradient(to right, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; margin: 0; }
+        .upload-area { border: 2px dashed var(--border); padding: 40px; border-radius: 20px; text-align: center; margin: 25px 0; cursor: pointer; background: rgba(99, 102, 241, 0.03); }
         .section { background: rgba(0,0,0,0.03); border: 1px solid var(--border); padding: 20px; border-radius: 16px; margin-bottom: 20px; }
-        .section-title { color: var(--accent); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; }
-
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; }
-        input, select, textarea { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 14px; }
-
-        #previewCanvas { max-width: 100%; border-radius: 12px; border: 1px solid var(--border); display: none; margin: 20px auto; }
-
-        .main-btn { 
-            background: linear-gradient(135deg, var(--primary) 0%, #4f46e5 100%); 
-            color: white; border: none; padding: 18px; border-radius: 14px; font-weight: 800; 
-            cursor: pointer; width: 100%; transition: 0.3s; box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
-        }
-
-        .main-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
-        
-        .pos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; width: 110px; }
+        input, select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text); }
+        #previewCanvas { max-width: 100%; border-radius: 12px; display: none; margin: 20px auto; border: 1px solid var(--border); }
+        .main-btn { background: linear-gradient(135deg, var(--primary) 0%, #4f46e5 100%); color: white; border: none; padding: 18px; border-radius: 14px; font-weight: 800; cursor: pointer; width: 100%; transition: 0.3s; }
         .pos-btn { padding: 8px; border: 1px solid var(--border); background: var(--card); border-radius: 8px; cursor: pointer; color: var(--text); }
-        .pos-btn.active { background: var(--primary); border-color: var(--primary); color: white; }
-
-        /* Success Overlay */
+        .pos-btn.active { background: var(--primary); color: white; }
         #successModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 5000; justify-content: center; align-items: center; text-align: center; }
         .modal-content { background: var(--card); padding: 40px; border-radius: 30px; border: 1px solid var(--primary); max-width: 400px; }
-
-        footer { margin-top: 50px; text-align: center; font-size: 13px; opacity: 0.6; padding-bottom: 30px; }
-        #progressContainer { display: none; margin-top: 20px; width: 100%; height: 10px; background: var(--border); border-radius: 5px; overflow: hidden; }
-        #progressBar { height: 100%; width: 0%; background: var(--primary); transition: width 0.3s; }
     </style>
 </head>
 <body data-theme="dark">
@@ -83,50 +33,30 @@ body { font-family: Arial, sans-serif; }
     <div class="container">
         <div class="header" style="display: flex; justify-content: space-between; align-items: center;">
             <h2>Studio Ultra Pro</h2>
-            <button class="pos-btn" onclick="toggleTheme()" style="width: auto; padding: 8px 15px;">🌓 Theme</button>
+            <button class="pos-btn" onclick="toggleTheme()">🌓 Theme</button>
         </div>
 
         <div class="upload-area" onclick="document.getElementById('files').click()">
-            <strong id="status" style="font-size: 18px;">Drop Images or Click to Upload</strong>
+            <strong id="status">Click to Upload Images</strong>
             <input type="file" id="files" accept="image/*" multiple style="display:none">
         </div>
 
         <canvas id="previewCanvas"></canvas>
 
         <div class="section">
-            <div class="section-title">Watermark & Branding</div>
             <div class="grid">
                 <div><label>Watermark Text</label><input type="text" id="wmText" placeholder="@Brand" oninput="updatePreview()"></div>
                 <div><label>Font</label>
                     <select id="wmFont" onchange="updatePreview()">
-                        <option value="Inter">Modern (Inter)</option>
+                        <option value="Inter">Modern</option>
                         <option value="'Lobster'">Playful</option>
                         <option value="'Montserrat'">Bold</option>
                     </select>
                 </div>
-                <div><label>Color</label><input type="color" id="wmColor" value="#ffffff" oninput="updatePreview()"></div>
-                <div><label>Size</label><input type="range" id="wmSize" min="1" max="30" value="8" oninput="updatePreview()"></div>
                 <div><label>Opacity</label><input type="range" id="wmOpacity" min="0.1" max="1.0" step="0.1" value="0.7" oninput="updatePreview()"></div>
-                <div><label>Anchor Position</label>
-                    <div class="pos-grid">
-                        <button class="pos-btn" onclick="setPos('top-left', this)">↖</button>
-                        <button class="pos-btn" onclick="setPos('top-right', this)">↗</button>
-                        <button class="pos-btn active" onclick="setPos('bottom-right', this)">↘</button>
-                    </div>
-                </div>
             </div>
         </div>
 
-        <div class="section">
-            <div class="section-title">Batch Adjustments</div>
-            <div class="grid">
-                <div><label>Brightness</label><input type="number" id="bright" value="100" oninput="updatePreview()"></div>
-                <div><label>Scale (%)</label><input type="number" id="scale" value="100" oninput="updatePreview()"></div>
-                <div><label>Format</label><select id="fmt"><option value="image/jpeg">JPEG</option><option value="image/webp">WebP</option></select></div>
-            </div>
-        </div>
-
-        <div id="progressContainer"><div id="progressBar"></div></div>
         <button class="main-btn" id="goBtn" onclick="processBatch()">⚡ Process & Download ZIP</button>
     </div>
 
@@ -134,23 +64,19 @@ body { font-family: Arial, sans-serif; }
     <div id="successModal">
         <div class="modal-content">
             <h1 style="color:var(--accent)">Success! 🎉</h1>
-            <p>Your batch is bundled in a ZIP file.</p>
-            <button class="main-btn" onclick="document.getElementById('successModal').style.display='none'">Back to Tool</button>
+            <p>Your images are ready.</p>
+            <button class="main-btn" onclick="document.getElementById('successModal').style.display='none'">Back</button>
         </div>
     </div>
 
-    <footer>
-        <p>&copy; <span id="year"></span> Studio Ultra Pro</p>
-        <a href="privacy.html">Privacy</a> &bull; <a href="terms-of-use.html">Terms</a> &bull; <a href="contact.html">Contact Us</a>
-    </footer>
-
+    <!-- THE BRAIN: JavaScript is needed to make it work -->
     <script>
         let filesArr = [], activePos = 'bottom-right';
 
-        function toggleTheme() {
+        const toggleTheme = () => {
             const b = document.body;
             b.setAttribute('data-theme', b.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
-        }
+        };
 
         document.getElementById('files').onchange = (e) => {
             filesArr = Array.from(e.target.files);
@@ -160,11 +86,6 @@ body { font-family: Arial, sans-serif; }
                 updatePreview();
             }
         };
-
-        function setPos(pos, btn) {
-            document.querySelectorAll('.pos-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active'); activePos = pos; updatePreview();
-        }
 
         function updatePreview() {
             if (!filesArr.length) return;
@@ -179,35 +100,25 @@ body { font-family: Arial, sans-serif; }
 
         function draw(cvs, img) {
             const ctx = cvs.getContext('2d');
-            const scale = (document.getElementById('scale').value || 100) / 100;
-            cvs.width = img.width * scale; cvs.height = img.height * scale;
-            ctx.filter = `brightness(${document.getElementById('bright').value}%)`;
-            ctx.drawImage(img, 0, 0, cvs.width, cvs.height);
-            ctx.filter = 'none';
+            cvs.width = img.width; cvs.height = img.height;
+            ctx.drawImage(img, 0, 0);
 
             const txt = document.getElementById('wmText').value;
             if(txt) {
-                const fSize = cvs.width * (document.getElementById('wmSize').value / 100);
                 ctx.globalAlpha = document.getElementById('wmOpacity').value;
-                ctx.fillStyle = document.getElementById('wmColor').value;
-                ctx.font = `bold ${fSize}px ${document.getElementById('wmFont').value}`;
-                const tw = ctx.measureText(txt).width;
-                let [v, h] = activePos.split('-');
-                let tx = h === 'left' ? 30 : cvs.width - tw - 30;
-                let ty = v === 'top' ? 30 + fSize : cvs.height - 30;
-                ctx.shadowColor = "rgba(0,0,0,0.5)"; ctx.shadowBlur = 10;
-                ctx.fillText(txt, tx, ty);
+                ctx.fillStyle = "white";
+                ctx.font = `bold ${cvs.width * 0.05}px ${document.getElementById('wmFont').value}`;
+                ctx.fillText(txt, 50, cvs.height - 50);
             }
-            ctx.globalAlpha = 1.0;
         }
 
         async function processBatch() {
+            if(!filesArr.length) return alert("Select files first!");
             const btn = document.getElementById('goBtn');
-            const prog = document.getElementById('progressBar');
-            document.getElementById('progressContainer').style.display = 'block';
-            btn.disabled = true; btn.innerText = "Processing...";
+            btn.disabled = true; btn.innerText = "Zipping...";
             const zip = new JSZip();
-            for (let i = 0; i < filesArr.length; i++) {
+
+            for (let f of filesArr) {
                 const data = await new Promise(res => {
                     const r = new FileReader();
                     r.onload = (e) => {
@@ -215,14 +126,13 @@ body { font-family: Arial, sans-serif; }
                         img.onload = () => {
                             const c = document.createElement('canvas');
                             draw(c, img);
-                            res(c.toDataURL(document.getElementById('fmt').value, 0.85));
+                            res(c.toDataURL('image/jpeg', 0.8));
                         };
                         img.src = e.target.result;
                     };
-                    r.readAsDataURL(filesArr[i]);
+                    r.readAsDataURL(f);
                 });
-                zip.file("processed_" + filesArr[i].name, data.split(','), {base64: true});
-                prog.style.width = ((i + 1) / filesArr.length * 100) + "%";
+                zip.file("studio_" + f.name, data.split(','), {base64: true});
             }
             const blob = await zip.generateAsync({type:"blob"});
             const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = "images.zip"; a.click();
@@ -230,7 +140,6 @@ body { font-family: Arial, sans-serif; }
             document.getElementById('successModal').style.display = 'flex';
             btn.disabled = false; btn.innerText = "⚡ Process & Download ZIP";
         }
-        document.getElementById('year').innerText = new Date().getFullYear();
     </script>
 </body>
 </html>
